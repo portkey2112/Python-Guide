@@ -1,4 +1,4 @@
-class TrieQ1:
+class Trie:
     def __init__(self, character, level):
         self.character = character
         self.children = {}
@@ -14,7 +14,7 @@ def insert_into_trie(current_node, given_string, it):
     # it : the index of character currently being processed
     current_char = given_string[it]
     if current_node.children[current_char] is None:
-        current_node.children[current_char] = TrieQ1(current_char, current_node.level + 1)
+        current_node.children[current_char] = Trie(current_char, current_node.level + 1)
     it += 1
     current_node = current_node.children[current_char]
     if it == len(given_string):
@@ -37,18 +37,37 @@ def level_order_traversal(start_node):
             current_level = current_node.level
             text = "\n{0}".format(text)
         print(text, end="\t")
+    print()
+
+
+def search_word(start_node, val):
+    current_node = start_node
+    for it in val:
+        if current_node.children[it] is None:
+            return False
+        current_node = current_node.children[it]
+    return current_node.word_or_not
 
 
 if __name__ == '__main__':
-    root_of_trie = TrieQ1(None, 0)
+    root_of_trie = Trie(None, 0)
     while True:
         string = input("String : ").lower()
         if string.__eq__("exit999"):
             break
         if not string.isalpha():
+            print("{0} SKIPPED".format(string))
             continue
         insert_into_trie(root_of_trie, string, 0)
     level_order_traversal(root_of_trie)
+    while True:
+        string = input("String : ").lower()
+        if string.__eq__("exit999"):
+            break
+        if not string.isalpha():
+            print("{0} SKIPPED".format(string))
+            continue
+        print("Is it in TRIE : {0}".format(search_word(root_of_trie, string)))
 
 
 # as you insert words into the TRIE,
